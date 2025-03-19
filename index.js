@@ -69,7 +69,7 @@ applyButton.style.padding = "10px 20px";
 applyButton.style.fontSize = "16px";
 applyButton.style.fontWeight = "bold";
 applyButton.style.color = "white";
-applyButton.style.background = "linear-gradient(135deg, #1e3c72, #2a5298)";
+applyButton.style.background = "linear-gradient(205deg, #0a1f44, #1e3c72, #f4a604)";
 applyButton.style.border = "none";
 applyButton.style.borderRadius = "5px";
 applyButton.style.cursor = "pointer";
@@ -144,7 +144,7 @@ randomFactsDiv.style.display = "flex"
 randomFactsDiv.style.flexDirection = "column"
 randomFactsDiv.style.alignItems = "center";
 
-applyButton.addEventListener("click", okToAddToList) //listening to see if the button was clicked
+applyButton.addEventListener("click", addWorkoutToList);
 
 // Attach event listener to form for "Enter" submission
 workoutForm.addEventListener("submit", function (event) {
@@ -152,27 +152,29 @@ workoutForm.addEventListener("submit", function (event) {
     okToAddToList(event)
 })
 
-function okToAddToList(event) {
-    event.preventDefault()
-    console.log("Submit button clicked"); // ✅ Debugging
+function addWorkoutToList() {
 
-    const workoutIsOk = correctWorkoutFormat()
-    const repsIsOk = correctRepFormat()
-    const setsIsOk = correctSetFormat()
+    const workoutName = correctWorkoutFormat();
+    const reps = correctRepFormat();
+    const sets = correctSetFormat();
 
-    if (!workoutIsOk) {
-        return;
-    }
-    console.log("Workout added:", workoutIsOk); // ✅ Debugging
-
-    if (!repsIsOk) {
+    if (!workoutName || !reps || !sets) { // returns early if any validation fails.
         return;
     }
 
-    if (!setsIsOk) {
-        return;
-    }
+    //creating a new list item here
+    let newListItem = document.createElement("li")
+    newListItem.innerHTML = `<strong>${workoutName}</strong> - Reps : ${reps} Sets : ${sets} `
 
+    workoutsToDoUl.appendChild(newListItem);
+
+
+    //lets style here
+
+    //lets clear all inputs here
+    workoutInput.value = "";
+    repsInput.value = "";
+    amountOfSets.value = "";
 }
 
 function correctWorkoutFormat() {
@@ -233,6 +235,11 @@ function correctSetFormat() {
     }
 
     return sets;
+}
+
+
+function completedWorkouts() {
+
 }
 
 
@@ -305,7 +312,7 @@ const fitnessFacts = [
 
 function showRandomFact() {
     let randomIndex = Math.floor(Math.random() * fitnessFacts.length) // using math.floor() to round up the number to choose a random index in the array of facts
-    randomFactsDiv.innerHTML = `<h1>Random Facts</h1> <p>${fitnessFacts[randomIndex]}</p>`
+    randomFactsDiv.innerHTML = `<h1>Random Fitness Facts</h1> <p>${fitnessFacts[randomIndex]}</p>`
 }
 
 showRandomFact();
