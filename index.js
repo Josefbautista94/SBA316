@@ -186,6 +186,10 @@ function addWorkoutToList() {
         completedWorkoutsUl.appendChild(newListItem)
     })
 
+    deleteButton.addEventListener("click", function(){
+        newListItem.remove();
+    })
+
     newListItem.appendChild(completeButton);
     newListItem.appendChild(deleteButton)
 
