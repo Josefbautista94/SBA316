@@ -45,7 +45,7 @@ function createInput(id, placeholder) {
     input.id = id;
     input.placeholder = placeholder;
     input.style.backgroundColor = "rgb(255, 255, 255)";
-    input.style.color = "rgb(255, 255, 255)";
+    input.style.color = "rgb(0, 0, 0)";
     input.style.border = "1px solid rgb(135, 135, 135)";
     input.style.padding = "10px";
     input.style.borderRadius = "5px";
@@ -74,14 +74,14 @@ applyButton.style.borderRadius = "5px";
 applyButton.style.cursor = "pointer";
 applyButton.style.transition = "all 0.3s ease";
 applyButton.style.marginTop = "10px";
-inputDiv.appendChild(applyButton);
+workoutForm.appendChild(applyButton);
 
 //  Create a flex container for lists
 let containerDiv = document.createElement("div");
 containerDiv.style.display = "flex";
-containerDiv.style.flexDirection = "row"; // ✅ Fix here
+containerDiv.style.flexDirection = "row";
 containerDiv.style.justifyContent = "center";
-containerDiv.style.gap = "30px"; // ✅ Use px instead of em for better spacing
+containerDiv.style.gap = "30px"; //  Use px instead of em for better spacing
 containerDiv.style.marginTop = "20px";
 mainEl.appendChild(containerDiv);
 
@@ -93,7 +93,7 @@ toDoDiv.style.backgroundColor = "rgb(40, 40, 40)";
 toDoDiv.style.color = "rgb(255, 255, 255)";
 toDoDiv.style.width = "30em";
 toDoDiv.style.border = "2px solid rgb(180, 180, 180)";
-toDoDiv.style.display = "flex"; // ✅ Fix for flex-direction to work
+toDoDiv.style.display = "flex"; //
 toDoDiv.style.flexDirection = "column";
 toDoDiv.style.alignItems = "center";
 toDoDiv.style.padding = "15px";
@@ -115,7 +115,7 @@ completedWorkoutsDiv.style.backgroundColor = "rgb(40, 40, 40)";
 completedWorkoutsDiv.style.color = "rgb(255, 255, 255)";
 completedWorkoutsDiv.style.width = "30em";
 completedWorkoutsDiv.style.border = "2px solid rgb(180, 180, 180)";
-completedWorkoutsDiv.style.display = "flex"; // ✅ Fix for flex-direction to work
+completedWorkoutsDiv.style.display = "flex"; //  
 completedWorkoutsDiv.style.flexDirection = "column";
 completedWorkoutsDiv.style.alignItems = "center";
 completedWorkoutsDiv.style.padding = "15px";
@@ -129,5 +129,94 @@ completedWorkoutsUl.style.listStyle = "none"; // Removes bullet points
 completedWorkoutsUl.style.padding = "0";
 completedWorkoutsDiv.appendChild(completedWorkoutsUl);
 
+applyButton.addEventListener("click", okToAddToList) //listening to see if the button was clicked
+
+// Attach event listener to form for "Enter" submission
+workoutForm.addEventListener("click,", function(event){
+    event.preventDefault()
+    okToAddToList(event)
+})
+
+function okToAddToList(event) {
+    event.preventDefault()
+    console.log("Submit button clicked"); // ✅ Debugging
+
+    const workoutIsOk = correctWorkoutFormat()
+    const repsIsOk = correctRepFormat() 
+    const setsIsOk = correctSetFormat()
+
+    if (!workoutIsOk) {
+        return;
+    }
+    console.log("Workout added:", workoutIsOk); // ✅ Debugging
+
+    if(!repsIsOk){
+        return;
+    }
+
+    if(!setsIsOk){
+        return;
+    }
+
+}
+
+function correctWorkoutFormat() {
+    let workout = workoutInput.value.trim();
+
+    if (workout === "") {
+        alert(`You can leave this blank! Wake Up!`);
+        workoutInput.focus()
+        return false;
+    }
+
+    if(/^\d/.test(workout)){ //🤮 Regex
+        alert(`What type of workout starts with a number? Try again!`)
+        workoutInput.focus();
+        return false;
+    }
+
+    return workout;
+}
+
+// checking if the rep format is correct
+function correctRepFormat(){
+
+    let reps = repsInput.value.trim();
+
+    if(reps === ""){
+        alert(`Don't Leave your repetitions blank! What would be the whole point of the workout??`)
+        repsInput.focus()
+        return false;
+    }
+    
+    if(!/^\d+$/.test(reps)){ // ^ -> Start of the string, \d+ -> Matches one or more digits (0-9), $ -> End of the string
 
 
+        alert("Please only use numbers! No spaces, no letters or special characters!")
+        repsInput.focus();
+        return false;
+    }
+
+    return reps;
+
+}
+
+function correctSetFormat(){
+    let sets = repsInput.value.trim();
+
+    if(sets === ""){
+        alert(`Don't Leave your sets blank! Come on now.`)
+        repsInput.focus()
+        return false;
+    }
+    
+    if(!/^\d+$/.test(sets)){ // ^ -> Start of the string, \d+ -> Matches one or more digits (0-9), $ -> End of the string
+
+
+        alert("Please only use numbers! No spaces, no letters or special characters!")
+        repsInput.focus();
+        return false;
+    }
+
+    return sets;
+}
