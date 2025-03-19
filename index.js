@@ -166,10 +166,14 @@ function addWorkoutToList() {
     let newListItem = document.createElement("li")
     newListItem.innerHTML = `<strong>${workoutName}</strong> - Reps : ${reps} Sets : ${sets} `
 
+   //lets style here
+    newListItem.style.borderBottom = "2px solid rgba(255, 255, 255, 0.3)"
+    newListItem.style.padding = "10px"
+    newListItem.style.margin = "5px 0";
+    newListItem.style.color = "white";
+
     workoutsToDoUl.appendChild(newListItem);
 
-
-    //lets style here
 
     //lets clear all inputs here
     workoutInput.value = "";
