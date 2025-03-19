@@ -1,108 +1,133 @@
 let mainEl = document.querySelector("main");
-mainEl.style.display = "flex"
-mainEl.style.flexDirection = "column"
-mainEl.style.alignItems = "center"
+mainEl.style.display = "flex";
+mainEl.style.flexDirection = "column";
+mainEl.style.alignItems = "center";
 
+//  Create inputDiv
 let inputDiv = document.createElement("div");
 inputDiv.id = "inputDiv";
 
-// Add the title dynamically instead of using innerHTML
+// Title
 let title = document.createElement("h1");
 title.textContent = "Workout Tracker";
 title.style.marginBottom = "10px"; // Add spacing
 inputDiv.appendChild(title);
 
-// Styling
+//  Style inputDiv
 inputDiv.style.color = "rgb(255, 255, 255)";
-inputDiv.style.backgroundColor = "rgb(60, 60, 59)";
+inputDiv.style.backgroundColor = "rgb(40, 40, 40)";
 inputDiv.style.display = "flex";
 inputDiv.style.flexDirection = "column";
 inputDiv.style.alignItems = "center";
-inputDiv.style.justifyContent = "center"; // Center content vertically
-inputDiv.style.padding = "20px"; // Added padding
-inputDiv.style.height = "auto"; // Adjusts based on content
-inputDiv.style.minHeight = "15em"; // Prevents it from being too small
-inputDiv.style.width = "22em"; // Slightly wider for better spacing
+inputDiv.style.justifyContent = "center";
+inputDiv.style.padding = "20px";
+inputDiv.style.width = "22em";
 inputDiv.style.border = "2px solid rgb(180, 180, 180)";
-inputDiv.style.borderRadius = "10px"; // Rounded edges
-inputDiv.style.boxShadow = "4px 4px 10px rgba(0, 0, 0, 0.3)"; // Subtle shadow for depth
-inputDiv.style.textAlign = "center"; // Ensures text is centered
+inputDiv.style.borderRadius = "10px";
+inputDiv.style.boxShadow = "4px 4px 10px rgba(0, 0, 0, 0.3)";
+inputDiv.style.textAlign = "center";
 inputDiv.style.gap = "10px";
-mainEl.appendChild(inputDiv)
+mainEl.appendChild(inputDiv);
 
+//  Create workoutForm
+let workoutForm = document.createElement("form");
+workoutForm.id = "workoutForm";
+workoutForm.style.display = "flex";
+workoutForm.style.flexDirection = "column";
+workoutForm.style.alignItems = "center";
+workoutForm.style.gap = "10px";
+inputDiv.appendChild(workoutForm);
 
-let workoutForm = document.createElement("form")
-workoutForm.id = "workoutForm"
-workoutForm.style.display = "flex"
-workoutForm.style.flexDirection = "column"
-inputDiv.appendChild(workoutForm)
+//  Create workout input fields 
+function createInput(id, placeholder) {
+    let input = document.createElement("input");
+    input.type = "text";
+    input.id = id;
+    input.placeholder = placeholder;
+    input.style.backgroundColor = "rgb(255, 255, 255)";
+    input.style.color = "rgb(255, 255, 255)";
+    input.style.border = "1px solid rgb(135, 135, 135)";
+    input.style.padding = "10px";
+    input.style.borderRadius = "5px";
+    input.style.width = "20em";
+    return input;
+}
 
-let workoutInput = document.createElement("input")
-workoutInput.type = "text"
-workoutInput.id = "workout-name"
-workoutInput.placeholder = "Workout Name"
-workoutInput.style.backgroundColor = "rgb(65, 65, 65)"
-workoutInput.style.color = "rgb(255, 255, 255)"
-workoutInput.style.borderColor = "rgb(135, 135, 135)"
-workoutForm.appendChild(workoutInput)
+let workoutInput = createInput("workout-name", "Workout Name");
+let repsInput = createInput("reps", "Amount Of Reps");
+let amountOfSets = createInput("sets", "Amount Of Sets");
 
-let repsInput = document.createElement("input");
-repsInput.type = "text"
-repsInput.id = "reps"
-repsInput.placeholder = "Amount Of Reps"
-repsInput.style.backgroundColor = "rgb(65, 65, 65)";
-repsInput.style.color = "rgb(255, 255, 255)"
-repsInput.style.borderColor = "rgb(135, 135, 135)"
-workoutForm.appendChild(repsInput)
+workoutForm.appendChild(workoutInput);
+workoutForm.appendChild(repsInput);
+workoutForm.appendChild(amountOfSets);
 
-let amountOfSets = document.createElement("input")
-amountOfSets.type ="text"
-amountOfSets.id = "sets"
-amountOfSets.placeholder = "Amount Of Sets"
-amountOfSets.style.backgroundColor = "rgb(65, 65, 65)";
-amountOfSets.style.color = "rgb(255, 255, 255)"
-amountOfSets.style.borderColor = "rgb(135, 135, 135)"
-workoutForm.appendChild(amountOfSets)
-
-let applyButton = document.createElement("button")
-applyButton.textContent = "Add To List"
+//  Create and style button
+let applyButton = document.createElement("button");
+applyButton.textContent = "Add To List";
 applyButton.style.padding = "10px 20px";
 applyButton.style.fontSize = "16px";
 applyButton.style.fontWeight = "bold";
 applyButton.style.color = "white";
-applyButton.style.background = "linear-gradient(135deg, #1e3c72, #2a5298)"; // Dark blue gradient
+applyButton.style.background = "linear-gradient(135deg, #1e3c72, #2a5298)";
 applyButton.style.border = "none";
 applyButton.style.borderRadius = "5px";
 applyButton.style.cursor = "pointer";
 applyButton.style.transition = "all 0.3s ease";
+applyButton.style.marginTop = "10px";
+inputDiv.appendChild(applyButton);
 
-inputDiv.appendChild(applyButton)
+//  Create a flex container for lists
+let containerDiv = document.createElement("div");
+containerDiv.style.display = "flex";
+containerDiv.style.flexDirection = "row"; // ✅ Fix here
+containerDiv.style.justifyContent = "center";
+containerDiv.style.gap = "30px"; // ✅ Use px instead of em for better spacing
+containerDiv.style.marginTop = "20px";
+mainEl.appendChild(containerDiv);
 
-let containerDiv = document.createElement("div")
-containerDiv.style.display ="flex"
-containerDiv.style.flexDirection = "center"
-containerDiv.style.gap ="60em"
-mainEl.appendChild(containerDiv)
+//  Create Workout To-Do List
+let toDoDiv = document.createElement("div");
+toDoDiv.id = "toDo";
+toDoDiv.innerHTML = "<h2>Workouts To Do</h2>";
+toDoDiv.style.backgroundColor = "rgb(40, 40, 40)";
+toDoDiv.style.color = "rgb(255, 255, 255)";
+toDoDiv.style.width = "30em";
+toDoDiv.style.border = "2px solid rgb(180, 180, 180)";
+toDoDiv.style.display = "flex"; // ✅ Fix for flex-direction to work
+toDoDiv.style.flexDirection = "column";
+toDoDiv.style.alignItems = "center";
+toDoDiv.style.padding = "15px";
+toDoDiv.style.textAlign = "center";
+containerDiv.appendChild(toDoDiv);
 
-let toDoDiv = document.createElement("div")
-toDoDiv.id = "toDo"
-toDoDiv.innerHTML = "<h2>Workouts To Do</h2>"
-toDoDiv.style.color = "rgb(255, 255, 255)"
-containerDiv.appendChild(toDoDiv)
+//  Append the UL for Workouts To Do
+let workoutsToDoUl = document.createElement("ul");
+workoutsToDoUl.id = "workoutsToDoUl";
+workoutsToDoUl.style.listStyle = "none"; // Removes bullet points
+workoutsToDoUl.style.padding = "0";
+toDoDiv.appendChild(workoutsToDoUl);
 
-let workoutsToDoUl = document.createElement("ul")
-workoutsToDoUl.id =  "workoutsToDoUl"
-toDoDiv.appendChild(workoutsToDoUl)
-
+//  Create Completed Workouts List
 let completedWorkoutsDiv = document.createElement("div");
-completedWorkoutsDiv.id = "completedWorkoutsDiv"
-completedWorkoutsDiv.innerHTML = "<h2>Completed Workouts</h2>"
-completedWorkoutsDiv.style.color = "rgb(255, 255, 255)"
-containerDiv.appendChild(completedWorkoutsDiv)
+completedWorkoutsDiv.id = "completedWorkoutsDiv";
+completedWorkoutsDiv.innerHTML = "<h2>Completed Workouts</h2>";
+completedWorkoutsDiv.style.backgroundColor = "rgb(40, 40, 40)";
+completedWorkoutsDiv.style.color = "rgb(255, 255, 255)";
+completedWorkoutsDiv.style.width = "30em";
+completedWorkoutsDiv.style.border = "2px solid rgb(180, 180, 180)";
+completedWorkoutsDiv.style.display = "flex"; // ✅ Fix for flex-direction to work
+completedWorkoutsDiv.style.flexDirection = "column";
+completedWorkoutsDiv.style.alignItems = "center";
+completedWorkoutsDiv.style.padding = "15px";
+completedWorkoutsDiv.style.textAlign = "center";
+containerDiv.appendChild(completedWorkoutsDiv);
 
-let completedWorkoutsUl = document.createElement("ul")
-completedWorkoutsUl.id = "completedWorkoutsUl"
-completedWorkoutsDiv.appendChild(completedWorkoutsUl)
+// Append the UL for Completed Workouts
+let completedWorkoutsUl = document.createElement("ul");
+completedWorkoutsUl.id = "completedWorkoutsUl";
+completedWorkoutsUl.style.listStyle = "none"; // Removes bullet points
+completedWorkoutsUl.style.padding = "0";
+completedWorkoutsDiv.appendChild(completedWorkoutsUl);
 
 
 

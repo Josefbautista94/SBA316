@@ -3,3 +3,8 @@ body {
     height: 100vh;
     margin: 0;
 }
+
+html {
+    cursor: url('miscStuff/cursor.png') 10 10, auto;
+}
+
