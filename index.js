@@ -164,13 +164,30 @@ function addWorkoutToList() {
 
     //creating a new list item here
     let newListItem = document.createElement("li")
-    newListItem.innerHTML = `<strong>${workoutName}</strong> - Reps : ${reps} Sets : ${sets} `
+    newListItem.innerHTML = `<strong>${workoutName}</strong> - Reps : ${reps} Sets : ${sets}`
 
-   //lets style here
+    //lets style here
     newListItem.style.borderBottom = "2px solid rgba(255, 255, 255, 0.3)"
     newListItem.style.padding = "10px"
     newListItem.style.margin = "5px 0";
     newListItem.style.color = "white";
+
+    let completeButton = document.createElement("button");
+    completeButton.innerHTML = "Completed ✔️"
+    
+
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete 🗑️";
+
+
+    completeButton.addEventListener("click", function(){
+        newListItem.remove();
+        newListItem.removeChild(completeButton);
+        completedWorkoutsUl.appendChild(newListItem)
+    })
+
+    newListItem.appendChild(completeButton);
+    newListItem.appendChild(deleteButton)
 
     workoutsToDoUl.appendChild(newListItem);
 
