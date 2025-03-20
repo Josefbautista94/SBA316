@@ -1,3 +1,10 @@
+let bodyEl = document.querySelector("body")
+bodyEl.style.background = "linear-gradient(135deg, #0a1f44, #1e3c72, #f4a604)"; // ✅ Use 'background' instead of 'backgroundColor'
+bodyEl.style.height = "100vh"
+bodyEl.style.margin = "0"
+
+document.documentElement.style.cursor = "url('miscStuff/cursor.png') 10 10, auto";
+
 let mainEl = document.querySelector("main");
 mainEl.style.display = "flex";
 mainEl.style.flexDirection = "column";
@@ -10,10 +17,10 @@ inputDiv.id = "inputDiv";
 // Title
 let title = document.createElement("h1");
 title.textContent = "Workout Tracker";
-title.style.marginBottom = "10px"; // Add spacing
+title.style.marginBottom = "10px";
 inputDiv.appendChild(title);
 
-//  Style inputDiv
+//Input Div Stuff
 inputDiv.style.color = "rgb(255, 255, 255)";
 inputDiv.style.backgroundColor = "rgb(40, 40, 40)";
 inputDiv.style.display = "flex";
@@ -144,15 +151,16 @@ randomFactsDiv.style.display = "flex"
 randomFactsDiv.style.flexDirection = "column"
 randomFactsDiv.style.alignItems = "center";
 
+document.addEventListener("DOMContentLoaded", loadWorkoutsFromStorage);
+
+
 applyButton.addEventListener("click", addWorkoutToList);
 
-// Attach event listener to form for "Enter" submission
-workoutForm.addEventListener("submit", function (event) {
-    event.preventDefault()
-    okToAddToList(event)
-})
+workoutForm.addEventListener("submit", addWorkoutToList)
 
-function addWorkoutToList() {
+
+function addWorkoutToList(event) {
+    event.preventDefault()
 
     const workoutName = correctWorkoutFormat();
     const reps = correctRepFormat();
@@ -174,26 +182,33 @@ function addWorkoutToList() {
 
     let completeButton = document.createElement("button");
     completeButton.innerHTML = "Completed ✔️"
-    
+    completeButton.style.backgroundColor = "green"
+
 
     let deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete 🗑️";
+    deleteButton.style.backgroundColor = "red"
 
 
-    completeButton.addEventListener("click", function(){
+    completeButton.addEventListener("click", function () {
         newListItem.remove();
         newListItem.removeChild(completeButton);
-        completedWorkoutsUl.appendChild(newListItem)
-    })
+        completedWorkoutsUl.appendChild(newListItem);
+        updateLocalStorage(); // Update localStorage when completed
+    });
 
-    deleteButton.addEventListener("click", function(){
+    deleteButton.addEventListener("click", function () {
         newListItem.remove();
+        updateLocalStorage(); // Update localStorage when deleted
+
     })
 
     newListItem.appendChild(completeButton);
     newListItem.appendChild(deleteButton)
 
     workoutsToDoUl.appendChild(newListItem);
+
+    updateLocalStorage(); // Save to localStorage when added
 
 
     //lets clear all inputs here
@@ -262,14 +277,47 @@ function correctSetFormat() {
     return sets;
 }
 
+//Function to update localStorage with the current workouts
+function updateLocalStorage() {
+    let workouts = []; // Creating an empty array to store all the Work outs to do
 
-function completedWorkouts() {
+    workoutsToDoUl.querySelectorAll('li').forEach((item) => { // finds all the li elements inside of the workoutsToDoUl by looping through each item using forEach
+        workouts.push(item.innerText); // gets all the text from the innerText of each workout and pushes it into the workouts array
+    });
 
+    localStorage.setItem("workoutsToDo", JSON.stringify(workouts)); // storing the workouts  array in localStorage undeeeer the key "workoutstToDo"
+    //JSON.stringify() to convert the array into a JSON string, cus localStorage can only store strings and not arrays
+
+    let completedWorkouts = [] // storing completed workouts
+
+    completedWorkoutsUl.querySelectorAll("li").forEach((item) => { // finds all li elements inside of the completedWorkoutsUl by looping through each item using foreach()
+        completedWorkouts.push(item.innerText) // same as up there ^^^^
+    })
+
+    localStorage.setItem("completedWorkouts", JSON.stringify(completedWorkouts)) // storing the completedWorkouts array in local storage
+
+}
+
+function loadWorkoutsFromStorage() {
+    let savedWorkouts = JSON.parse(localStorage.getItem("workoutsToDo")) || []; //Gets the saved workouts from localStorage, converts them from a string to an array, and defaults to an empty array if nothing is found.
+    savedWorkouts.forEach((workoutText) => { // loops through each item workoutText in the savedWorkouts array
+        let listItem = createWorkoutListItem(workoutText, false); //Creates a new list item for the "Workouts To Do" list with buttons, using the workout text and marking it as incomplete.
+
+        workoutsToDoUl.appendChild(listItem);
+    });
+
+    let savedCompletedWorkouts = JSON.parse(localStorage.getItem("completedWorkouts")) || []; // retrives the stored completedWorkouts list from local storage,if no saed data, the default is an empty array 
+    savedCompletedWorkouts.forEach((workoutText) => { // loops through each workout in the savedCompletedWorkouts array
+        let listItem = createWorkoutListItem(workoutText, true); // Creates a list item for completed workouts without action buttons.
+
+        completedWorkoutsUl.appendChild(listItem);
+    });
 }
 
 
 
 
+//created an array with random fitness facts
 const fitnessFacts = [
     "Muscles grow during rest, not during workouts.",
     "The human body has over 600 muscles!",
@@ -335,8 +383,12 @@ const fitnessFacts = [
     "Even a 5-minute workout is better than skipping exercise entirely."
 ];
 
-function showRandomFact() {
-    let randomIndex = Math.floor(Math.random() * fitnessFacts.length) // using math.floor() to round up the number to choose a random index in the array of facts
+function showRandomFact() { // Function to display a random fact in the randomFactsDiv
+    let randomIndex = Math.floor(Math.random() * fitnessFacts.length)
+    // Math.random() generates a random decimal between 0 and 1
+    // Multiplying by fitnessFacts.length scales it to the array's range (e.g., 0 to length-1)
+    // Math.floor() rounds down (not up) to ensure we get a valid array index
+
     randomFactsDiv.innerHTML = `<h1>Random Fitness Facts</h1> <p>${fitnessFacts[randomIndex]}</p>`
 }
 
